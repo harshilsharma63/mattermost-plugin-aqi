@@ -1,0 +1,25 @@
+{
+    "id": "com.harshil.mattermost.plugin.aqi",
+    "version": "1.0.0",
+    "name": "Air Quality Index",
+    "description": "TODO",
+    "min_server_version": "5.17.0",
+    "webapp": {
+        "bundle_path": "webapp/main.js"
+    },
+    "server": {
+        "executable": "server/plugin.exe"
+    },
+    "settings_schema": {
+        "header": "",
+        "footer": "",
+        "settings": [
+            {
+                "key": "AirVisualAPIKey",
+                "display_name": "AirVisual API Key",
+                "type": "text",
+                "help_text": "Go to https://www.airvisual.com/air-pollution-data-api TODO"
+            }
+        ]
+    }
+}
