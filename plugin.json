@@ -19,6 +19,11 @@
                 "display_name": "AirVisual API Key",
                 "type": "text",
                 "help_text": "Go to https://www.airvisual.com/air-pollution-data-api TODO"
+            }, {
+                "key": "Locations",
+                "display_name": "Array of Locations",
+                "type": "text",
+                "help_text": "[\"country_state_city\", \"country_state_city\", ...]]"
             }
         ]
     }

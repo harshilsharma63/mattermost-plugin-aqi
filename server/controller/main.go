@@ -13,9 +13,7 @@ type Endpoint struct {
 }
 
 var Endpoints = map[string]*Endpoint{
-	// add endpoints here.
-	// Map endpoint URL to Endpoint object. Example -
-	// GetMetadata.Path: GetMetadata
+	getPollutionData.Path: getPollutionData,
 }
 
 // Authenticated verifies if provided request is performed by a logged-in Mattermost user.
