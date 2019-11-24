@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Client from '../../client';
+import Constants from "../../constants";
 
 
 export default class LeftSidebarHeader extends React.Component {
@@ -16,6 +18,12 @@ export default class LeftSidebarHeader extends React.Component {
                 data: [],
             }
         };
+    }
+
+    componentDidMount() {
+        Client.doGet(Constants.URL_REFRESH_DATA).then(r => {
+            console.log(r);
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {

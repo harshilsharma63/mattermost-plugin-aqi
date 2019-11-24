@@ -75,6 +75,19 @@ func (p *Plugin) OnConfigurationChange() error {
 		}
 
 		config.SetConfig(&configuration)
+
+		//if err := config.PurgePollutionDataIfRequired(); err != nil {
+		//	config.Mattermost.LogError("Error in checking for/purging pollution data: " + err.Error())
+		//	return err
+		//}
+
+		_ = config.Mattermost.KVDelete(config.CacheKeyPollutionData)
+
+		go func() {
+			if err := task.PublishPollutionData(); err != nil {
+				config.Mattermost.LogError("", err, nil)
+			}
+		}()
 	}
 	return nil
 }
@@ -143,11 +156,6 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 }
 
 func (p *Plugin) Run() {
-	config.Mattermost.LogInfo("FRunning...")
-	if err := task.PublishPollutionData(); err != nil {
-		config.Mattermost.LogError("", err, nil)
-	}
-
 	if !p.running {
 		p.running = true
 		p.runner()

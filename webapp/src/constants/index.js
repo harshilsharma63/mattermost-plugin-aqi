@@ -8,6 +8,8 @@ import SVGS from './svgs';
 //
 const URL_BASE = `${Utils.getBaseURL()}/plugins/${PLUGIN_NAME}`;
 
+const URL_REFRESH_DATA = `${URL_BASE}/refresh`;
+
 const ACTIONS = {
     RECEIVE_POLLUTION_DATA: `${PLUGIN_NAME}_receive_pollution_data`,
 };
@@ -18,6 +20,7 @@ const ACTIONS = {
 export default {
     PLUGIN_NAME,
     URL_BASE,
+    URL_REFRESH_DATA,
     SVGS,
     ACTIONS,
 };

@@ -1,6 +1,9 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"github.com/mattermost/mattermost-server/plugin"
 	"regexp"
 	"strings"
 
@@ -62,4 +65,29 @@ func CommandError(msg string) (*model.CommandResponse, *model.AppError) {
 		Type: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 		Text: msg,
 	}, nil
+}
+
+func PublishToAllTeams(data map[string]interface{}, mattermost plugin.API) error {
+	teams, appErr := mattermost.GetTeams()
+	if appErr != nil {
+		return errors.New(appErr.Error())
+	}
+
+	for _, team := range teams {
+		mattermost.PublishWebSocketEvent(
+			"receive_pollution_data",
+			data,
+			&model.WebsocketBroadcast{
+				TeamId: team.Id,
+			},
+		)
+	}
+
+	return nil
+}
+
+func GetMD5Hash(text string) string {
+	hasher := md5.New()
+	hasher.Write([]byte(text))
+	return hex.EncodeToString(hasher.Sum(nil))
 }

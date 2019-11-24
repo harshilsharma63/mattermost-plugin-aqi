@@ -2,6 +2,8 @@ package config
 
 import (
 	"encoding/json"
+	"github.com/harshilsharma63/mattermost-plugin-aqi/server/util"
+	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
 	"github.com/pkg/errors"
 	"go.uber.org/atomic"
@@ -20,6 +22,11 @@ const (
 	HeaderMattermostUserID = "Mattermost-User-Id"
 
 	RunnerInterval = 30 * time.Second
+
+	CacheKeyPollutionData           = "pollution_data"
+	PollutionDataCacheExpirySeconds = 3600
+
+	CacheKeyLocationConfigHash = "location_config_hash"
 )
 
 var (
@@ -81,4 +88,40 @@ func (c *Configuration) IsValid() error {
 	}
 
 	return nil
+}
+
+func PurgePollutionDataIfRequired() *model.AppError {
+	should, appErr := shouldPurgeLocationData()
+	if appErr != nil {
+		return appErr
+	}
+
+	if should {
+		if appErr := Mattermost.KVDelete(CacheKeyPollutionData); appErr != nil {
+			return appErr
+		}
+
+		newLocationConfigHash := util.GetMD5Hash(GetConfig().Locations)
+		if appErr := Mattermost.KVSet(CacheKeyPollutionData, []byte(newLocationConfigHash)); appErr != nil {
+			return appErr
+		}
+	}
+
+	return nil
+}
+
+func shouldPurgeLocationData() (bool, *model.AppError) {
+	data, appErr := Mattermost.KVGet(CacheKeyLocationConfigHash)
+	if appErr != nil {
+		return false, appErr
+	}
+
+	if data == nil {
+		return true, nil
+	}
+
+	oldLocationConfigHash := string(data)
+	newLocationConfigHash := util.GetMD5Hash(GetConfig().Locations)
+
+	return oldLocationConfigHash == newLocationConfigHash, nil
 }
