@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"go.uber.org/atomic"
 	"strings"
+	"time"
 )
 
 const (
@@ -17,6 +18,8 @@ const (
 	URLStaticBase = URLPluginBase + "/static"
 
 	HeaderMattermostUserID = "Mattermost-User-Id"
+
+	RunnerInterval = 30 * time.Second
 )
 
 var (

@@ -13,7 +13,7 @@ type Endpoint struct {
 }
 
 var Endpoints = map[string]*Endpoint{
-	getPollutionData.Path: getPollutionData,
+	refreshData.Path: refreshData,
 }
 
 // Authenticated verifies if provided request is performed by a logged-in Mattermost user.

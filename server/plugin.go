@@ -1,10 +1,12 @@
 package main
 
 import (
+	"github.com/harshilsharma63/mattermost-plugin-aqi/server/task"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
@@ -19,6 +21,7 @@ type Plugin struct {
 	plugin.MattermostPlugin
 
 	handler http.Handler
+	running bool
 }
 
 func (p *Plugin) OnActivate() error {
@@ -37,6 +40,8 @@ func (p *Plugin) OnActivate() error {
 		config.Mattermost.LogError(err.Error())
 		return err
 	}
+
+	p.Run()
 
 	return nil
 }
@@ -135,6 +140,31 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	} else if !endpoint.RequiresAuth || controller.Authenticated(w, r) {
 		endpoint.Execute(w, r)
 	}
+}
+
+func (p *Plugin) Run() {
+	config.Mattermost.LogInfo("FRunning...")
+	if err := task.PublishPollutionData(); err != nil {
+		config.Mattermost.LogError("", err, nil)
+	}
+
+	if !p.running {
+		p.running = true
+		p.runner()
+	}
+}
+
+func (p *Plugin) runner() {
+	go func() {
+		<-time.NewTimer(config.RunnerInterval).C
+		if err := task.PublishPollutionData(); err != nil {
+			config.Mattermost.LogError("", err, nil)
+		}
+		if !p.running {
+			return
+		}
+		p.runner()
+	}()
 }
 
 func main() {
