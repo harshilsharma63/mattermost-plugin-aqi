@@ -1,9 +1,9 @@
 import React from 'react';
+
 import Actions from './actions';
 import Reducers from './reducers';
-import Util from './utils';
 
-import LeftSidebarHeader from "./components/left_sidebar_header";
+import LeftSidebarHeader from './components/left_sidebar_header';
 
 import Constants from './constants';
 

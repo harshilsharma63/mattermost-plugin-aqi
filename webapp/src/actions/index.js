@@ -1,5 +1,5 @@
-import {receivePollutionData} from "./left_sidebar_header_actions";
+import {receivePollutionData} from './left_sidebar_header_actions';
 
 export default {
     receivePollutionData,
-}
+};
