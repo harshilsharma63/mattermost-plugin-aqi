@@ -18,11 +18,8 @@ class PluginClass {
         registry.registerWebSocketEventHandler(
             `custom_${Constants.PLUGIN_NAME}_receive_pollution_data`,
             (event) => {
-                const pollutionData = {
-                    id: Util.uuidv4(),
-                    data: JSON.parse(event.data.pollutionData),
-                };
-                store.dispatch(Actions.receivePollutionData(pollutionData));
+                console.log(event.data);
+                store.dispatch(Actions.receivePollutionData(JSON.parse(event.data.data)));
             },
         );
 

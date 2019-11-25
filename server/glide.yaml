@@ -4,3 +4,5 @@ import:
   version: ~5.17.0
   subpackages:
   - plugin
+- package: github.com/google/uuid
+  version: ^1.1.1

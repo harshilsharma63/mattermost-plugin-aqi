@@ -20,9 +20,11 @@ export default class LeftSidebarHeader extends React.Component {
         };
     }
 
-    componentDidMount() {
-        Client.doGet(Constants.URL_REFRESH_DATA).then(r => {
-            console.log(r);
+    async componentDidMount() {
+        const pollutionData = await Client.doGet(Constants.URL_REFRESH_DATA);
+        console.log(pollutionData);
+        this.setState({
+            pollutionData,
         });
     }
 

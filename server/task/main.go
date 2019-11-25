@@ -3,42 +3,36 @@ package task
 import (
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/harshilsharma63/mattermost-plugin-aqi/server/config"
-	"github.com/harshilsharma63/mattermost-plugin-aqi/server/providers/airvisual"
+	"github.com/harshilsharma63/mattermost-plugin-aqi/server/service"
 	"github.com/harshilsharma63/mattermost-plugin-aqi/server/util"
-	"time"
 )
 
 func PublishPollutionData() error {
-	citiesData := []*airvisual.CityData{}
-
-	for i, location := range config.GetConfig().DerivedLocations {
-		if i > 0 {
-			time.Sleep(5 * time.Second)
-		}
-
-		cityData, err := airvisual.GetCityData(config.GetConfig().AirVisualAPIKey, location.Country, location.State, location.City)
-		if err != nil {
-			return err
-		}
-
-		citiesData = append(citiesData, cityData)
-	}
-
-	data, err := json.Marshal(citiesData)
+	citiesData, err := service.GetPollutionData()
 	if err != nil {
 		return err
 	}
 
+	dataToPublish := map[string]interface{}{
+		"id":   uuid.New().String(),
+		"data": citiesData,
+	}
+
+	data, err := json.Marshal(dataToPublish)
+	if err != nil {
+		return err
+	}
+
+	_ = config.Mattermost.KVDelete(config.CacheKeyPollutionData)
 	if appErr := config.Mattermost.KVSetWithExpiry(config.CacheKeyPollutionData, data, config.PollutionDataCacheExpirySeconds); appErr != nil {
 		return errors.New(appErr.Error())
 	}
 
-	dataToPublish := map[string]interface{}{
-		"pollutionData": string(data),
-	}
-
-	if err := util.PublishToAllTeams(dataToPublish, config.Mattermost); err != nil {
+	if err := util.PublishToAllTeams(map[string]interface{}{
+		"data": string(data),
+	}, config.Mattermost); err != nil {
 		return err
 	}
 

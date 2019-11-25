@@ -1,15 +1,8 @@
-hash: ae0a1babb232b91ff594d2c143fbd2407cc57915fcd6395f3c568eaf5434c149
-updated: 2019-11-23T18:22:14.438557+05:30
+hash: a9755d7f6095e98e7b6a1873d7e166ebfb1d63b83b30f732fa131f145c56a9b3
+updated: 2019-11-25T05:20:32.4999+05:30
 imports:
 - name: github.com/blang/semver
   version: 1a9109f8c4a1d669a78442f567dfe8eedf982793
-- name: github.com/harshilsharma63/mattermost-plugin-aqi
-  version: d7f9d66b8d4f9da2ff2b895612b61e688645a7b0
-  subpackages:
-  - server/command
-  - server/config
-  - server/controller
-  - server/util
 - name: github.com/BurntSushi/toml
   version: 3012a1dbe2e4bd1391d42b32f0577cb7bbc7f005
 - name: github.com/davecgh/go-spew
@@ -30,6 +23,8 @@ imports:
   - ptypes/any
   - ptypes/duration
   - ptypes/timestamp
+- name: github.com/google/uuid
+  version: 0cd6bf5da1e1c83f8b45653022c74f71af0538a4
 - name: github.com/gorilla/websocket
   version: ea4d1f681babbce9545c9c5f3d5194a789c89f5b
 - name: github.com/hashicorp/go-hclog
@@ -130,7 +125,7 @@ imports:
   - unicode/bidi
   - unicode/norm
 - name: golang.org/x/tools
-  version: 2a6ccf25d769ccc6c0b364ff440915b10af1e3cf
+  version: f5828fc9a10359e54e99dbe0f1eb477417b1ff24
   subpackages:
   - go/analysis
   - go/analysis/passes/inspect
