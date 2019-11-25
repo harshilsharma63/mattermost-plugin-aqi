@@ -40,7 +40,7 @@ func executeRefreshData(w http.ResponseWriter, r *http.Request) {
 		}
 
 		dataToPublish = map[string]interface{}{
-			"id": uuid.New().String(),
+			"id":   uuid.New().String(),
 			"data": citiesData,
 		}
 
@@ -51,11 +51,6 @@ func executeRefreshData(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	//if err := util.PublishToAllTeams(dataToPublish, config.Mattermost); err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
 
 	data, err := json.Marshal(dataToPublish)
 	if err != nil {

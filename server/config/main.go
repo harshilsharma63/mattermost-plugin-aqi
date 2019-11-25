@@ -10,21 +10,10 @@ import (
 )
 
 const (
-	CommandPrefix             = PluginName
-	URLMappingKeyPrefix       = "url_"
-	ServerExeToWebappRootPath = "/../webapp"
-
-	URLPluginBase = "/plugins/" + PluginName
-	URLStaticBase = URLPluginBase + "/static"
-
-	HeaderMattermostUserID = "Mattermost-User-Id"
-
-	RunnerInterval = 1 * time.Hour
-
+	HeaderMattermostUserID          = "Mattermost-User-Id"
+	RunnerInterval                  = 1 * time.Hour
 	CacheKeyPollutionData           = "pollution_data"
 	PollutionDataCacheExpirySeconds = 3600
-
-	CacheKeyLocationConfigHash = "location_config_hash"
 )
 
 var (
@@ -34,13 +23,13 @@ var (
 
 type Location struct {
 	Country string
-	State string
-	City string
+	State   string
+	City    string
 }
 
 type Configuration struct {
 	AirVisualAPIKey string
-	Locations string
+	Locations       string
 
 	// derived attributes
 	DerivedLocations []Location

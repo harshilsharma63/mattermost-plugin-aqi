@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	baseURL = "https://api.airvisual.com"
+	baseURL        = "https://api.airvisual.com"
 	getCityDataURL = baseURL + "/v2/city"
 )
 
